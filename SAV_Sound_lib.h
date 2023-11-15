@@ -2,7 +2,7 @@
  * SAV_Sound_lib.h
  *
  *  Created on: Nov 11, 2023
- *      Author: Tanda_company_PC01
+ *      Author: AndrewS
  */
 
 #ifndef INC_SAV_SOUND_LIB_H_
@@ -59,6 +59,8 @@
 //
 //
 void Play_Sound_Note (uint16_t, uint8_t, uint16_t);
+void Play_Sound_Note_FADE_IN (uint16_t, uint16_t); // From 0 to Max (PWM = 50%)
+void Play_Sound_Note_FADE_OUT (uint16_t, uint16_t);// From Max (PWM = 50%) to 0
 void Melody1 (void);
 
 #endif /* INC_SAV_SOUND_LIB_H_ */
