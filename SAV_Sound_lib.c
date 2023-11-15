@@ -51,6 +51,43 @@ void Play_Sound_Note (uint16_t Sound_Freq_Hz, uint8_t Note_PWM, uint16_t Note_de
 	 HAL_TIMEx_PWMN_Stop(&htim1,TIM_CHANNEL_1);
 	 HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_1);
 }
+
+void Play_Sound_Note_FADE_IN (uint16_t Sound_Freq_Hz, uint16_t Note_delay_ms)
+{
+	PERIOD_VALUE = (uint32_t)(TIM1_Freq_Hz / Sound_Freq_Hz - 1);//Period
+	for (uint8_t i=0; i < 50; i++)
+	{
+		PULSE1_VALUE = (uint32_t)(PERIOD_VALUE * (i / 100.0));//Capture Compare 1 Value (PWM, Volume)
+		//
+		MX_TIM1_Init();
+		HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+		HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+		HAL_GPIO_WritePin(LD3_Green_GPIO_Port, LD3_Green_Pin, GPIO_PIN_SET);
+		HAL_Delay(Note_delay_ms/50);
+		HAL_GPIO_WritePin(LD3_Green_GPIO_Port, LD3_Green_Pin, GPIO_PIN_RESET);
+		HAL_TIMEx_PWMN_Stop(&htim1,TIM_CHANNEL_1);
+		HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_1);
+	}
+}
+
+void Play_Sound_Note_FADE_OUT (uint16_t Sound_Freq_Hz, uint16_t Note_delay_ms)
+{
+	PERIOD_VALUE = (uint32_t)(TIM1_Freq_Hz / Sound_Freq_Hz - 1);//Period
+	for (uint8_t i=50; i > 0; i--)
+	{
+		PULSE1_VALUE = (uint32_t)(PERIOD_VALUE * (i / 100.0));//Capture Compare 1 Value (PWM, Volume)
+		//
+		MX_TIM1_Init();
+		HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+		HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+		HAL_GPIO_WritePin(LD3_Green_GPIO_Port, LD3_Green_Pin, GPIO_PIN_SET);
+		HAL_Delay(Note_delay_ms/50);
+		HAL_GPIO_WritePin(LD3_Green_GPIO_Port, LD3_Green_Pin, GPIO_PIN_RESET);
+		HAL_TIMEx_PWMN_Stop(&htim1,TIM_CHANNEL_1);
+		HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_1);
+	}
+}
+
 void Melody1 (void)
 {
 	/*
